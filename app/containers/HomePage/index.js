@@ -38,13 +38,6 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   render() {
-    const { loading, error, repos } = this.props;
-    const reposListProps = {
-      loading,
-      error,
-      repos,
-    };
-
     return (
       <article>
         <Helmet>
@@ -81,15 +74,6 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 }
 
 HomePage.propTypes = {
-  loading: PropTypes.bool,
-  error: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.bool,
-  ]),
-  repos: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.bool,
-  ]),
   onSubmitForm: PropTypes.func,
   username: PropTypes.string,
   onChangeUsername: PropTypes.func,
