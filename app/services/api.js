@@ -1,26 +1,36 @@
-import ApiHost from 'config/ServiceConfig';
-const Wreck = require('wreck');
-
-// function getUser() {
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       resolve({
-//         email: 'somemockemail@email.com',
-//         repository: 'http://github.com/username',
-//       });
-//     }, 100);
-//   });
-// }
+import axios from 'utils/axiosInstance';
 
 export const login = async (email, password) => {
   try {
-    const result = await Wreck.post(`${ApiHost}/users/auth`, {
-      payload: {
-        email,
-        password,
+    const { data } = await axios.post('/users/auth', {
+      email,
+      password,
+    });
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getHotelList = async (filter = null, limit = null, offset = null) => {
+  try {
+    const { data } = await axios.get('/hotels', {
+      params: {
+        filter,
+        limit,
+        offset,
       },
     });
-    return result;
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createHotel = async (hotel) => {
+  try {
+    const { data } = await axios.post('/hotels', { ...hotel });
+    return data;
   } catch (error) {
     throw error;
   }

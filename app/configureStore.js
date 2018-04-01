@@ -2,18 +2,27 @@
  * Create the store with dynamic reducers
  */
 
+import 'config/ReactotronConfig';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { fromJS } from 'immutable';
 import { routerMiddleware } from 'react-router-redux';
 import createSagaMiddleware from 'redux-saga';
+
+import Config from 'config/DebugConfig';
+import Reactotron from 'reactotron-react-js';
+
 import createReducer from './reducers';
 
-const sagaMiddleware = createSagaMiddleware();
+// const sagaMiddleware = createSagaMiddleware();
 
 export default function configureStore(initialState = {}, history) {
   // Create the store with two middlewares
   // 1. sagaMiddleware: Makes redux-sagas work
   // 2. routerMiddleware: Syncs the location/URL path to the state
+
+  const sagaMonitor = Config.useReactotron ? Reactotron.createSagaMonitor() : null;
+  const sagaMiddleware = createSagaMiddleware({ sagaMonitor });
+
   const middlewares = [
     sagaMiddleware,
     routerMiddleware(history),
@@ -37,11 +46,14 @@ export default function configureStore(initialState = {}, history) {
       : compose;
   /* eslint-enable */
 
-  const store = createStore(
-    createReducer(),
-    fromJS(initialState),
-    composeEnhancers(...enhancers)
-  );
+  // const store = createStore(
+  //   createReducer(),
+  //   fromJS(initialState),
+  //   composeEnhancers(...enhancers)
+  // );
+
+  const createAppropriateStore = Config.useReactotron ? Reactotron.createStore : createStore;
+  const store = createAppropriateStore(createReducer(), fromJS(initialState), composeEnhancers(...enhancers));
 
   // Extensions
   store.runSaga = sagaMiddleware.run;

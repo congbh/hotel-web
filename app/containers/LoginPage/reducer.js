@@ -9,7 +9,7 @@ import {
 
 // The initial state of the App
 const initialState = fromJS({
-  user: {},
+  isLogedIn: false,
   error: null,
 });
 
@@ -18,11 +18,14 @@ function loginReducer(state = initialState, action) {
     case LOGIN_REQUEST:
       return state;
     case LOGIN_SUCCESS:
-      return { ...state, user: action.user };
+      return {
+        ...state,
+        isLogedIn: true,
+      };
     case LOGIN_FAILURE:
       return {
         ...state,
-        user: {},
+        isLogedIn: false,
         error: action.error,
       };
     default:

@@ -1,4 +1,4 @@
-const ApiHost = 'http://localhost:8080/api/v1';
+const ApiHost = 'https://api-hotel-dev.herokuapp.com/api/v1';
 
 export default {
   ApiHost,

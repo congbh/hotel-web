@@ -1,10 +1,12 @@
 import { connect } from 'react-redux';
-import { compose as recompose, withState, withHandlers } from 'recompose';
+import { lifecycle, pure, compose as recompose, withHandlers } from 'recompose';
 import { createStructuredSelector } from 'reselect';
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
+
+
 import { loginRequest } from './actions';
-import { makeSelectUser } from './selectors';
+import { makeSelectIsLogin } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import LoginForm from './Layout';
@@ -16,31 +18,31 @@ export function mapDispatchToProps(dispatch) {
 }
 
 const mapStateToProps = createStructuredSelector({
-  user: makeSelectUser(),
+  isLogedIn: makeSelectIsLogin(),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 const withReducer = injectReducer({ key: 'login', reducer });
 const withSaga = injectSaga({ key: 'login', saga });
-const withEmail = withState('email', 'onSetEmail', '');
-const withPassword = withState('password', 'onSetPassword', '');
 
 export default recompose(
   withReducer,
   withSaga,
   withConnect,
-  withEmail,
-  withPassword,
   withHandlers({
-    onLogin: ({ email, password, onLoginRequest }) => () => {
+    onSubmit: ({ onLoginRequest }) => (values) => {
+      const email = values.get('email');
+      const password = values.get('password');
       onLoginRequest(email, password);
     },
-    onChangeEmail: ({ onSetEmail }) => ({ target: { value } }) => {
-      onSetEmail(value);
-    },
-    onChangePassword: ({ onSetPassword }) => ({ target: { value } }) => {
-      onSetPassword(value);
+  }),
+  lifecycle({
+    componentWillReceiveProps(nextProps) {
+      if (nextProps.isLogedIn) {
+        this.props.history.push('/dashboard');
+      }
     },
   }),
+  pure,
 )(LoginForm);

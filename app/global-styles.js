@@ -27,4 +27,8 @@ injectGlobal`
     font-family: Georgia, Times, 'Times New Roman', serif;
     line-height: 1.5em;
   }
+  .ui.active.dimmer.modals.transition {
+    display: flex !important;
+    display: -ms-flexbox !important;
+  }
 `;

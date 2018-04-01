@@ -7,23 +7,20 @@
  */
 
 import React from 'react';
-// import { Helmet } from 'react-helmet';
-// import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
+import RouteProtector from 'utils/routeProtector';
+import DashboardPage from 'containers/Dashboard/Loadable';
 
-import FeaturePage from 'containers/FeaturePage/Loadable';
+import HotelPage from 'containers/HotelPage/Loadable';
 import LoginPage from 'containers/LoginPage/Loadable';
-import NotFoundPage from 'containers/NotFoundPage/Loadable';
-// import Footer from 'components/Footer';
 
 export default function App() {
   return (
     <div>
       <Switch>
         <Route exact path="/" component={LoginPage} />
-        <Route path="/features" component={FeaturePage} />
-        <Route path="/login" component={LoginPage} />
-        <Route path="" component={NotFoundPage} />
+        <RouteProtector path="/dashboard" component={DashboardPage} />
+        <RouteProtector path="/hotel" component={HotelPage} />
       </Switch>
     </div>
   );
