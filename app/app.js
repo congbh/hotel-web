@@ -18,6 +18,7 @@ import createHistory from 'history/createBrowserHistory';
 import 'sanitize.css/sanitize.css';
 import 'semantic-ui-css/semantic.min.css';
 import 'assets/scss/style.scss';
+import 'react-table/react-table.css';
 
 // Import root app
 import App from 'containers/App';

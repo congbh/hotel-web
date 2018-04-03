@@ -39,13 +39,14 @@ export function loginRequest(email, password) {
 
 /**
  *
- * @param  {token} token The token response from server
+ * @param  {user} user The currentUser take from server
  *
  * @return {object}    An action object with a type of LOGIN_SUCCESS
  */
-export function loginSuccess() {
+export function loginSuccess(user) {
   return {
     type: LOGIN_SUCCESS,
+    user,
   };
 }
 

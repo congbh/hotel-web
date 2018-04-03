@@ -1,33 +1,39 @@
 // import { SubmissionError } from 'redux-form/immutable';
-import { addHotelRequest } from './actions';
-function submit(values, dispatch, props) { // eslint-disable-line
-  const name = values.get('name');
-  const floor = values.get('floor');
-  const room = values.get('room');
-  const address = values.get('address');
-  const province = values.get('province');
-  const phone = values.get('phone');
-  const email = values.get('email');
-  const note = values.get('note');
-  const website = values.get('website');
-  const created_by = values.get('website'); // eslint-disable-line
-  const activated = true;
+import _ from 'lodash';
+import {
+  createHotelRequest,
+  updateHotelRequest,
+  hotelRequestFailure,
+} from './actions';
 
-  dispatch(
-    addHotelRequest({
-      name,
-      floor,
-      room,
-      address,
-      province,
-      phone,
-      email,
-      note,
-      website,
-      created_by,
-      activated,
-    })
-  );
+function submit(values, dispatch, props) { // eslint-disable-line
+  let hotel = {
+    name: values.get('name'),
+    floor: _.toNumber(values.get('floor')),
+    room: _.toNumber(values.get('room')),
+    address: values.get('address'),
+    province: values.get('province'),
+    phone: values.get('phone'),
+    email: values.get('email'),
+    note: values.get('note'),
+    website: values.get('website'),
+    activated: true,
+  };
+  const { isCreate } = props;
+  if (!isCreate) {
+    const id = values.get('id');
+    const created_by = values.get('created_by'); // eslint-disable-line
+    hotel = { ...hotel, id, created_by };
+    dispatch(updateHotelRequest(hotel));
+  } else {
+    const created_by =  window.sessionStorage.getItem('uid'); // eslint-disable-line
+    if (!created_by) {  // eslint-disable-line
+      dispatch(hotelRequestFailure('UnAuthorization'));
+    } else {
+      hotel = { ...hotel, created_by };
+      dispatch(createHotelRequest(hotel));
+    }
+  }
 //   const name = values.get('name');
 //   addHotelRequest({
 //     name,

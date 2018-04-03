@@ -1,14 +1,16 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { login } from 'services/api';
-import { setCurrentUser } from 'services/localStorage';
+import { login, getMyProfile } from 'services/api';
 import { loginSuccess, loginFailure } from './actions';
 import { LOGIN_REQUEST } from './constants';
 
 export function* doLogin({ email, password }) {
   try {
-    const { token, uid } = yield call(login, email, password);
-    setCurrentUser({ token, uid });
-    yield put(loginSuccess());
+    const { token, uid, refresh_token } = yield call(login, email, password);
+    window.sessionStorage.setItem('token', token);
+    window.sessionStorage.setItem('uid', uid);
+    window.localStorage.setItem('refresh_token', refresh_token);
+    const user = yield call(getMyProfile);
+    yield put(loginSuccess(user));
   } catch (err) {
     yield put(loginFailure(err));
   }

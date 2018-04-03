@@ -10,7 +10,6 @@ import createSagaMiddleware from 'redux-saga';
 
 import Config from 'config/DebugConfig';
 import Reactotron from 'reactotron-react-js';
-
 import createReducer from './reducers';
 
 // const sagaMiddleware = createSagaMiddleware();

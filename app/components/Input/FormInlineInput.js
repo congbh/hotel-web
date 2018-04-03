@@ -2,9 +2,9 @@ import { Form, Input } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const FormInlineInput = ({ inline = true, fluid = true, lable, labelPosition, placeholder, input, meta }) => (
+const FormInlineInput = ({ inline = true, fluid = true, lable, labelPosition, placeholder, input }) => (
   <Form.Field inline={inline}>
-    <Input label={lable} labelPosition={labelPosition} placeholder={placeholder} fluid={fluid} {...input} {...meta} />
+    <Input label={lable} labelPosition={labelPosition} placeholder={placeholder} fluid={fluid} {...input} />
   </Form.Field>
   );
 
@@ -15,7 +15,7 @@ FormInlineInput.propTypes = {
   input: PropTypes.object,
   fluid: PropTypes.bool,
   inline: PropTypes.bool,
-  meta: PropTypes.object,
+  // meta: PropTypes.object,
 };
 
 export default FormInlineInput;

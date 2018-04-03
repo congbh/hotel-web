@@ -1,17 +1,33 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { getCurrentUser } from 'services/localStorage';
 import PropTypes from 'prop-types';
-
+import decode from 'jwt-decode';
 /* eslint-disable no-unused-expressions */
-const RouteProtector = ({ component: Component, ...rest }) => {
-  const currentUser = getCurrentUser();
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        currentUser ? (
-          <Component currentUser={currentUser} {...props} />
+
+const checkAuth = () => {
+  const token = window.sessionStorage.getItem('token');
+  const refreshToken = window.localStorage.getItem('refresh_token');
+  if (!token || !refreshToken) {
+    return false;
+  }
+
+  try {
+    const { exp } = decode(refreshToken);
+    if (exp < new Date().getTime() / 1000) {
+      return false;
+    }
+  } catch (e) {
+    return false;
+  }
+  return true;
+};
+
+const RouteProtector = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={(props) =>
+        checkAuth() ? (
+          <Component {...props} />
       ) : (
         <Redirect
           to={{
@@ -21,9 +37,8 @@ const RouteProtector = ({ component: Component, ...rest }) => {
         />
       )
     }
-    />
-  );
-};
+  />
+);
 /* eslint-enable */
 RouteProtector.propTypes = {
   component: PropTypes.func,
